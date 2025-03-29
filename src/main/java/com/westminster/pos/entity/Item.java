@@ -2,8 +2,14 @@ package com.westminster.pos.entity;
 
 import com.westminster.pos.entity.enums.MeasuringUnitType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Table(name="item")
 public class Item {
     @Id
