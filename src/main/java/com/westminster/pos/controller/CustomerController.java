@@ -4,7 +4,10 @@ import com.westminster.pos.dto.CustomerDTO;
 import com.westminster.pos.dto.request.CustomerUpdateDTO;
 import com.westminster.pos.service.CustomerService;
 import com.westminster.pos.service.impl.CustomerServiceIMPL;
+import com.westminster.pos.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,12 +40,23 @@ public class CustomerController {
         return customerDTO;
     }
 
-    @GetMapping(
+  /*  @GetMapping(
             path="/get-all-customers"
     )
     public List<CustomerDTO> getAllCustomers(){
         List<CustomerDTO> allCustomers=customerService.getAllCustomers();
         return allCustomers;
+    }*/
+
+    @GetMapping(
+            path="/get-all-customers"
+    )
+    public ResponseEntity<StandardResponse> getAllCustomers(){
+        List<CustomerDTO> allCustomers=customerService.getAllCustomers();
+        ResponseEntity<StandardResponse> response=new ResponseEntity<StandardResponse>(
+                new StandardResponse(200,"sucess",allCustomers), HttpStatus.OK
+        );
+        return response;
     }
     @DeleteMapping(
             path="delete-customer/{id}"
