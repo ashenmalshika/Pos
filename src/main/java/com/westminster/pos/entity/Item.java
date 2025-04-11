@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,4 +37,7 @@ public class Item {
 
     @Column(name="active_status", columnDefinition = "TINYINT default 0")
     private boolean activeStatus;
+
+    @OneToMany(mappedBy = "items")
+    private Set<OrderDetails> orderDetails;
 }
