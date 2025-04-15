@@ -1,6 +1,9 @@
 package com.westminster.pos.service.impl;
 
+import com.westminster.pos.dto.paginated.PaginatedResponseOrderDetails;
+import com.westminster.pos.dto.queryInterface.OrderDetailsInterface;
 import com.westminster.pos.dto.request.RequestOrderSaveDTO;
+import com.westminster.pos.dto.response.ResponseOrderDetailsDTO;
 import com.westminster.pos.entity.Order;
 import com.westminster.pos.entity.OrderDetails;
 import com.westminster.pos.repo.CustomerRepo;
@@ -12,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,5 +62,26 @@ public class OrderServiceIMPL implements OrderService {
             return "Saved";
         }
         return null;
+    }
+
+    @Override
+    public PaginatedResponseOrderDetails getAllOrderDetails(boolean status, int page, int size) {
+        List<OrderDetailsInterface> orderDetailsDTOS=orderRepo.getAllOrderDetails(status, PageRequest.of(page,size));
+        List<ResponseOrderDetailsDTO> list = new ArrayList<>();
+        for (OrderDetailsInterface orderDetailsDTO : orderDetailsDTOS) {
+            ResponseOrderDetailsDTO r=new ResponseOrderDetailsDTO(
+                    orderDetailsDTO.getCustomerName(),
+                    orderDetailsDTO.getCustomerAddress(),
+                    orderDetailsDTO.getContactNumber(),
+                    orderDetailsDTO.getDate(),
+                    orderDetailsDTO.getTotal()
+            );
+            list.add(r);
+        }
+
+        PaginatedResponseOrderDetails paginatedResponseOrderDetails=new PaginatedResponseOrderDetails(
+                list,orderRepo.countAllOrderDetails(status)
+        );
+        return paginatedResponseOrderDetails;
     }
 }
